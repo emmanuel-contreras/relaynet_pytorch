@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import torch.utils.data as data
 import h5py
+from pathlib import Path
 
 
 class ImdbData(data.Dataset):
@@ -27,36 +28,69 @@ class ImdbData(data.Dataset):
         return len(self.y)
 
 
-def get_imdb_data():
+def get_imdb_data(dir_path = None):
+    
+    
+    ### ECG Edits
+    if dir_path != None:
+        path_data = str(dir_path / "data_small.h5")
+        path_labels = str(dir_path / "labels_small.h5")
+        path_set = str(dir_path / "set_small.h5")
+    else:
+        path_data = "datasets/Data.h5"
+        path_labels = "datasets/label.h5"
+        path_set = 'datasets/set.h5'
+    ###
+    
     # TODO: Need to change later
-    NumClass = 9
+    # NumClass = 9 # original value
+    NumClass = 10
 
     # Load DATA
-    Data = h5py.File('datasets/Data.h5', 'r')
+    Data = h5py.File(path_data, 'r')
+    #Data = h5py.File('datasets/Data.h5', 'r')
     a_group_key = list(Data.keys())[0]
     Data = list(Data[a_group_key])
-    Data = np.squeeze(np.asarray(Data))
-    Label = h5py.File('datasets/label.h5', 'r')
+    Data = np.squeeze(np.asarray(Data)) ## removes channel dimension (rows, cols, num_images)
+    #### ECG modifications
+    #print(f"data shape: {Data.shape}")
+    ####
+    
+    
+    Label = h5py.File(path_labels, 'r')
+    #Label = h5py.File('datasets/label.h5', 'r')
     a_group_key = list(Label.keys())[0]
     Label = list(Label[a_group_key])
     Label = np.squeeze(np.asarray(Label))
-    set = h5py.File('datasets/set.h5', 'r')
+    
+    #### ECG modifications
+    #print(f"label shape: {Label.shape}")
+    ####
+    
+    
+    set = h5py.File(path_set, 'r')
+    #set = h5py.File('datasets/set.h5', 'r')
     a_group_key = list(set.keys())[0]
     set = list(set[a_group_key])
     set = np.squeeze(np.asarray(set))
+    
+    ## format data 
     sz = Data.shape
     Data = Data.reshape([sz[0], 1, sz[1], sz[2]])
-    Data = Data[:, :, 61:573, :]
-    weights = Label[:, 1, 61:573, :]
-    Label = Label[:, 0, 61:573, :]
+    Data = Data[:, :, 0:256, :] # (num_images, channel, rows, cols) this is done to include only 
+                                 # Data[:, :, 61:573, :] original slicing 
+    #get labels and weights
+    weights = Label[:, 1, 0:256, :]
+    Label = Label[:, 0, 0:256, :]
     sz = Label.shape
     Label = Label.reshape([sz[0], 1, sz[1], sz[2]])
     weights = weights.reshape([sz[0], 1, sz[1], sz[2]])
+    
     train_id = set == 1
     test_id = set == 3
-
-    Tr_Dat = Data[train_id, :, :, :]
-    Tr_Label = np.squeeze(Label[train_id, :, :, :]) - 1 # Index from [0-(NumClass-1)]
+    
+    Tr_Dat = Data[train_id, :, :, :]                # line below originally commented in    
+    Tr_Label = np.squeeze(Label[train_id, :, :, :]) #- 1 # Index from [0-(NumClass-1)]
     Tr_weights = weights[train_id, :, :, :]
     Tr_weights = np.tile(Tr_weights, [1, NumClass, 1, 1])
 

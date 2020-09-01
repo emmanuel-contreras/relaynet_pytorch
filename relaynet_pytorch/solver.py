@@ -77,6 +77,7 @@ class Solver(object):
 
         if torch.cuda.is_available():
             model.cuda()
+            print('cuda is available')
 
         print('START TRAIN.')
         curr_iter = 0
@@ -86,16 +87,27 @@ class Solver(object):
         for epoch in range(num_epochs):
             scheduler.step()
             for i_batch, sample_batched in enumerate(train_loader):
-                X = Variable(sample_batched[0])
-                y = Variable(sample_batched[1])
-                w = Variable(sample_batched[2])
-
+                # ECG: originally commented in
+                # X = Variable(sample_batched[0])
+                # y = Variable(sample_batched[1])
+                # w = Variable(sample_batched[2])
+                ##### ECG: resolves:
+                # RuntimeError: Input type (torch.cuda.DoubleTensor)
+                # and weight type (torch.cuda.FloatTensor) should be the same
+                X = sample_batched[0].type(torch.FloatTensor)
+                y = sample_batched[1].type(torch.FloatTensor)
+                w = sample_batched[2].type(torch.FloatTensor)
+                #####
+                
                 if model.is_cuda:
                     X, y, w = X.cuda(), y.cuda(), w.cuda()
 
                 for iter in range(iter_per_epoch):
                     curr_iter += iter
                     optim.zero_grad()
+                    ###
+                    print(f"X size: {X.shape}")
+                    ###
                     output = model(X)
                     loss = self.loss_func(output, y, w)
                     loss.backward()
