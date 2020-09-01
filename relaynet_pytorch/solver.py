@@ -35,7 +35,7 @@ class Solver(object):
                           "weight_decay": 0.0001}
     gamma = 0.5
     step_size = 5
-    NumClass = 9
+    # NumClass = 9 # ECG commented out, not used anywhere
 
     def __init__(self, optim=torch.optim.Adam, optim_args={},
                  loss_func=CombinedLoss()):
@@ -113,9 +113,12 @@ class Solver(object):
                     loss.backward()
                     optim.step()
                     if iter % log_nth == 0:
-                        self.train_loss_history.append(loss.data[0])
+                        continue # remove this to view lines below
+                        ### ECG commented out for clarity, originally commented in
+                        # ECG previously loss.data[0] where loss.data is now
+                        self.train_loss_history.append(loss.data) 
                         print('[Iteration : ' + str(iter) + '/' + str(iter_per_epoch * num_epochs) + '] : ' + str(
-                            loss.data[0]))
+                            loss.data))
 
 
                 #_, batch_output = torch.max(F.softmax(model(X),dim=1), dim=1)
@@ -126,6 +129,6 @@ class Solver(object):
                 # val_output = torch.max(model(Variable(torch.from_numpy(val_loader.dataset.X))), dim= 1)
                 # val_accuracy = self.accuracy(val_output[1], Variable(torch.from_numpy(val_loader.dataset.y)))
                 # self.val_acc_history.append(val_accuracy)
-            print('[Epoch : ' + str(epoch) + '/' + str(num_epochs) + '] : ' + str(loss.data[0]))
+            print('[Epoch : ' + str(epoch) + '/' + str(num_epochs) + '] : ' + str(loss.data))
             model.save('models/' + exp_dir_name + '/relaynet_epoch' + str(epoch + 1) + '.model')
         print('FINISH.')

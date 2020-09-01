@@ -28,14 +28,14 @@ class ImdbData(data.Dataset):
         return len(self.y)
 
 
-def get_imdb_data(dir_path = None):
+def get_imdb_data(dir_path = None, suffix = '', row_upper_limit=0, column_lower_limit=0): # ECG TODO update default values
     
     
     ### ECG Edits
     if dir_path != None:
-        path_data = str(dir_path / "data_small.h5")
-        path_labels = str(dir_path / "labels_small.h5")
-        path_set = str(dir_path / "set_small.h5")
+        path_data = str(dir_path / f"data{suffix}.h5")
+        path_labels = str(dir_path / f"labels{suffix}.h5")
+        path_set = str(dir_path / f"set{suffix}.h5")
     else:
         path_data = "datasets/Data.h5"
         path_labels = "datasets/label.h5"
@@ -55,8 +55,7 @@ def get_imdb_data(dir_path = None):
     #### ECG modifications
     #print(f"data shape: {Data.shape}")
     ####
-    
-    
+        
     Label = h5py.File(path_labels, 'r')
     #Label = h5py.File('datasets/label.h5', 'r')
     a_group_key = list(Label.keys())[0]
@@ -66,8 +65,7 @@ def get_imdb_data(dir_path = None):
     #### ECG modifications
     #print(f"label shape: {Label.shape}")
     ####
-    
-    
+        
     set = h5py.File(path_set, 'r')
     #set = h5py.File('datasets/set.h5', 'r')
     a_group_key = list(set.keys())[0]
@@ -77,11 +75,11 @@ def get_imdb_data(dir_path = None):
     ## format data 
     sz = Data.shape
     Data = Data.reshape([sz[0], 1, sz[1], sz[2]])
-    Data = Data[:, :, 0:256, :] # (num_images, channel, rows, cols) this is done to include only 
+    Data = Data[:, :, 0:row_upper_limit, column_lower_limit:] # (num_images, channel, rows, cols) this is done to include only 
                                  # Data[:, :, 61:573, :] original slicing 
     #get labels and weights
-    weights = Label[:, 1, 0:256, :]
-    Label = Label[:, 0, 0:256, :]
+    weights = Label[:, 1, 0:row_upper_limit, column_lower_limit:] # May's values for OCT data [:, 1, 0:256, 100:]
+    Label = Label[:, 0, 0:row_upper_limit, column_lower_limit:]
     sz = Label.shape
     Label = Label.reshape([sz[0], 1, sz[1], sz[2]])
     weights = weights.reshape([sz[0], 1, sz[1], sz[2]])
@@ -89,8 +87,8 @@ def get_imdb_data(dir_path = None):
     train_id = set == 1
     test_id = set == 3
     
-    Tr_Dat = Data[train_id, :, :, :]                # line below originally commented in    
-    Tr_Label = np.squeeze(Label[train_id, :, :, :]) #- 1 # Index from [0-(NumClass-1)]
+    Tr_Dat = Data[train_id, :, :, :]                 
+    Tr_Label = np.squeeze(Label[train_id, :, :, :]) - 1 # Index from [0-(NumClass-1)]
     Tr_weights = weights[train_id, :, :, :]
     Tr_weights = np.tile(Tr_weights, [1, NumClass, 1, 1])
 

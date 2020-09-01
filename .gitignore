@@ -5,3 +5,4 @@ networks/classifiers/__pycache__/
 
 \.idea/
 
+*.model
