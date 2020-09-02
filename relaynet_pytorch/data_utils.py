@@ -28,7 +28,7 @@ class ImdbData(data.Dataset):
         return len(self.y)
 
 
-def get_imdb_data(dir_path = None, suffix = '', row_upper_limit=0, column_lower_limit=0): # ECG TODO update default values
+def get_imdb_data(dir_path = None, suffix = ''): #, row_upper_limit=0, column_lower_limit=0): # ECG TODO update default values
     
     
     ### ECG Edits
@@ -73,13 +73,14 @@ def get_imdb_data(dir_path = None, suffix = '', row_upper_limit=0, column_lower_
     set = np.squeeze(np.asarray(set))
     
     ## format data 
+  
     sz = Data.shape
     Data = Data.reshape([sz[0], 1, sz[1], sz[2]])
-    Data = Data[:, :, 0:row_upper_limit, column_lower_limit:] # (num_images, channel, rows, cols) this is done to include only 
+    Data = Data[:, :, 61:573, :] # (num_images, channel, rows, cols) this is done to include only 
                                  # Data[:, :, 61:573, :] original slicing 
     #get labels and weights
-    weights = Label[:, 1, 0:row_upper_limit, column_lower_limit:] # May's values for OCT data [:, 1, 0:256, 100:]
-    Label = Label[:, 0, 0:row_upper_limit, column_lower_limit:]
+    weights = Label[:, 1, 61:573, :] # May's values for OCT data [:, 1, 0:256, 100:]
+    Label = Label[:, 0, 61:573, :]
     sz = Label.shape
     Label = Label.reshape([sz[0], 1, sz[1], sz[2]])
     weights = weights.reshape([sz[0], 1, sz[1], sz[2]])
@@ -88,12 +89,12 @@ def get_imdb_data(dir_path = None, suffix = '', row_upper_limit=0, column_lower_
     test_id = set == 3
     
     Tr_Dat = Data[train_id, :, :, :]                 
-    Tr_Label = np.squeeze(Label[train_id, :, :, :]) - 1 # Index from [0-(NumClass-1)]
+    Tr_Label = np.squeeze(Label[train_id, :, :, :]) + 1 # Index from [0-(NumClass-1)]  #ECG originally : - 1 # Index from [0-(NumClass-1)]
     Tr_weights = weights[train_id, :, :, :]
     Tr_weights = np.tile(Tr_weights, [1, NumClass, 1, 1])
 
     Te_Dat = Data[test_id, :, :, :]
-    Te_Label = np.squeeze(Label[test_id, :, :, :]) - 1
+    Te_Label = np.squeeze(Label[test_id, :, :, :]) + 1
     Te_weights = weights[test_id, :, :, :]
     Te_weights = np.tile(Te_weights, [1, NumClass, 1, 1])
 
