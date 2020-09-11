@@ -6,3 +6,4 @@ networks/classifiers/__pycache__/
 \.idea/
 
 *.model
+.ipynb_checkpoints/
