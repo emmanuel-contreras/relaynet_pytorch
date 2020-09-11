@@ -28,7 +28,8 @@ class ImdbData(data.Dataset):
         return len(self.y)
 
 
-def get_imdb_data(dir_path = None, suffix = ''): #, row_upper_limit=0, column_lower_limit=0): # ECG TODO update default values
+def get_imdb_data(dir_path = None, suffix = '', row_slice=("start","end"), col_slice=("start","end")): #, row_upper_limit=0, column_lower_limit=0): # ECG TODO update default values 
+# row_slice and col_slice determine slicing below
     
     
     ### ECG Edits
@@ -51,7 +52,7 @@ def get_imdb_data(dir_path = None, suffix = ''): #, row_upper_limit=0, column_lo
     #Data = h5py.File('datasets/Data.h5', 'r')
     a_group_key = list(Data.keys())[0]
     Data = list(Data[a_group_key])
-    Data = np.squeeze(np.asarray(Data)) ## removes channel dimension (rows, cols, num_images)
+    Data = np.squeeze(np.asarray(Data)) ## removes channel dimension (num_images, rows, cols)
     #### ECG modifications
     #print(f"data shape: {Data.shape}")
     ####
@@ -72,16 +73,31 @@ def get_imdb_data(dir_path = None, suffix = ''): #, row_upper_limit=0, column_lo
     set = list(set[a_group_key])
     set = np.squeeze(np.asarray(set))
     
-    ## format data 
+    ## FORMAT DATA
+    
+    #row slicing
+    img_rows, img_cols = Data[0,:,:].shape # image limits
+    
+    r_start, r_stop = row_slice
+    r_start = 0 if r_start == "start" else r_start
+    r_stop = img_rows if r_stop == "end" else r_stop
+    
+    #col slicing
+    c_start, c_stop = col_slice
+    c_start = 0 if c_start == "start" else c_start
+    c_stop = img_cols if c_stop == "end" else c_stop
+    
+    print(f"slicing: ({r_start}:{r_stop}, {c_start}:{c_stop})")
+    
     sz = Data.shape
     Data = Data.reshape([sz[0], 1, sz[1], sz[2]])
-    Data = Data[:, :, 100: , :256] # (num_images, channel, rows, cols) # this slicing creates 512x512 image
-                                 #[:, :, 61:573, :]
-                                 #Duke dataset [:, :,130:642 , :] 
+    Data = Data[:, :, r_start:r_stop, c_start:c_stop] # (num_images, channel, rows, cols) # this slicing creates 512x512 image
+                                 #originally [:, :, 61:573, :]
+                                 #our Duke dataset [:, :,130:642 , :] 
     #get labels and weights
     #512x512 image
-    weights = Label[:, 1, 100:, :256] # May's values for OCT data [:, 1, 0:256, 100:] array of [256,3000]
-    Label = Label[:, 0, 100:, :256]  # modify img dimensions
+    weights = Label[:, 1, r_start:r_stop, c_start:c_stop] # May's values for OCT data [:, 1, 0:256, 100:] array of [256,3000]
+    Label = Label[:, 0, r_start:r_stop, c_start:c_stop]  # modify img dimensions
     sz = Label.shape
     Label = Label.reshape([sz[0], 1, sz[1], sz[2]])
     weights = weights.reshape([sz[0], 1, sz[1], sz[2]])
@@ -90,13 +106,13 @@ def get_imdb_data(dir_path = None, suffix = ''): #, row_upper_limit=0, column_lo
     test_id = set == 3
     
     Tr_Dat = Data[train_id, :, :, :]                
-    Tr_Label = np.squeeze(Label[train_id, :, :, :]) - 1 # Index from [0-(NumClass-1)]  #ECG originally : - 1 # Index from [0-(NumClass-1)]
-    Tr_weights = weights[train_id, :, :, :]             # ECG labeling of Duke dataset has [-1 to NumClass] (-1 is void)
+    Tr_Label = np.squeeze(Label[train_id, :, :, :]) - 1 # Index from [0-(NumClass-1)]
+    Tr_weights = weights[train_id, :, :, :]             
     Tr_weights = np.tile(Tr_weights, [1, NumClass, 1, 1])
 
     Te_Dat = Data[test_id, :, :, :]
-    Te_Label = np.squeeze(Label[test_id, :, :, :]) - 1  # Index from [0-(NumClass-1)]  #ECG originally : - 1 # Index from [0-(NumClass-1)]
-    Te_weights = weights[test_id, :, :, :]              # ECG labeling of Duke dataset has [-1 to NumClass] (-1 is void)
+    Te_Label = np.squeeze(Label[test_id, :, :, :]) - 1  # Index from [0-(NumClass-1)]
+    Te_weights = weights[test_id, :, :, :]              
     Te_weights = np.tile(Te_weights, [1, NumClass, 1, 1])
 
 
