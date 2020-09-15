@@ -10,3 +10,14 @@ A. Guha Roy, S. Conjeti, S.P.K.Karri, D.Sheet, A.Katouzian, C.Wachinger, and N.N
 Link: https://arxiv.org/abs/1704.02161
 
 Enjoy!! :)
+
+##############################
+
+if labels mask has negative values (void is -1) it throws this error
+
+RuntimeError: cuDNN error: CUDNN_STATUS_NOT_INITIALIZED
+Exception raised from createCuDNNHandle at ..\aten\src\ATen\cudnn\Handle.cpp:9 (most recent call first):
+00007FFE055075A200007FFE05507540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+
+
+If  
