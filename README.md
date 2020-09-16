@@ -29,6 +29,7 @@ Enjoy!! :)
     * conda install ipykernel -y
   * matplotlib --> conda install -c anaconda matplotlib
   * h5py --> conda install -c anaconda h5py
+  * tifffile --> conda install -c conda-forge tifffile
 
 ---
 ### Common Errors
