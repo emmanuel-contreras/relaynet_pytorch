@@ -10,10 +10,31 @@ A. Guha Roy, S. Conjeti, S.P.K.Karri, D.Sheet, A.Katouzian, C.Wachinger, and N.N
 Link: https://arxiv.org/abs/1704.02161
 
 Enjoy!! :)
+---
 
+
+### Shape of input arrays (h5 files)
+* data.h5
+  * [num_images(img index), number_channels (binary so 1), image_rows ]
+* labels.h5
+  * 
+* set.h5
+
+### Dependencies
+* conda
+  * pytorch --> conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
+  * To use jupyter notebook and conda envs:
+    * conda kernel in jupyter notebook:
+    * conda install nb_conda_kernels
+    * conda install ipykernel -y
+  * matplotlib --> conda install -c anaconda matplotlib
+  * h5py --> conda install -c anaconda h5py
+
+---
 ### Common Errors
-
-
+* Forkpiclikng error
+  * computer ran out of disk memory 
+  
 * Data contains negative values ( I was previously labeling void as -1)
 ```
 RuntimeError: cuDNN error: CUDNN_STATUS_NOT_INITIALIZED
