@@ -13,13 +13,15 @@ Enjoy!! :)
 
 ### Common Errors
 
-if labels mask has negative values (void is -1) it throws this error
 
+* Data contains negative values ( I was previously labeling void as -1)
+```
 RuntimeError: cuDNN error: CUDNN_STATUS_NOT_INITIALIZED
 Exception raised from createCuDNNHandle at ..\aten\src\ATen\cudnn\Handle.cpp:9 (most recent call first):
 00007FFE055075A200007FFE05507540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+```
 
-
-## these lines prevent the error
-## RuntimeError: Sizes of tensors must match except in dimension 3. Got 166 and 167 (The offending index is 0)
-## which seems like an input size/kernel dimension mismatch
+* Image dimensions/kernel size mismatch (512x512) for kernel (7x3) or scaled in ratio
+```
+RuntimeError: Sizes of tensors must match except in dimension 3. Got 166 and 167 (The offending index is 0) 
+```
