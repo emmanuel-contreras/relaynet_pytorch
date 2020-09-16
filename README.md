@@ -11,7 +11,7 @@ Link: https://arxiv.org/abs/1704.02161
 
 Enjoy!! :)
 
-##############################
+### Common Errors
 
 if labels mask has negative values (void is -1) it throws this error
 
@@ -20,4 +20,6 @@ Exception raised from createCuDNNHandle at ..\aten\src\ATen\cudnn\Handle.cpp:9 (
 00007FFE055075A200007FFE05507540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
 
 
-If  
+## these lines prevent the error
+## RuntimeError: Sizes of tensors must match except in dimension 3. Got 166 and 167 (The offending index is 0)
+## which seems like an input size/kernel dimension mismatch
