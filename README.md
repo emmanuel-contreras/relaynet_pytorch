@@ -14,11 +14,13 @@ Enjoy!! :)
 
 
 ### Shape of input arrays (h5 files)
+Note: images are fed vertically to the relaynet so layers increase left to right. np.tranpose may be needed.
 * data.h5
   * [num_images(img index), number_channels (binary so 1), image_rows ]
 * labels.h5
-  * 
+  * [num_images(img index), 2(1-labels,2-weights, rows, cols]
 * set.h5
+  * [num_images(img index), 1 (1-train,3-test)]
 
 ### Dependencies
 * conda
