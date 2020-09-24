@@ -116,9 +116,9 @@ class Solver(object):
                         continue # remove this to view lines below
                         ### ECG commented out for clarity, originally commented in
                         # ECG previously loss.data[0] where loss.data is now
-                        self.train_loss_history.append(loss.data) 
+                        self.train_loss_history.append(loss.item()) # was loss.data
                         print('[Iteration : ' + str(iter) + '/' + str(iter_per_epoch * num_epochs) + '] : ' + str(
-                            loss.data))
+                            loss.item()))
 
 
                 #_, batch_output = torch.max(F.softmax(model(X),dim=1), dim=1)
@@ -129,6 +129,6 @@ class Solver(object):
                 # val_output = torch.max(model(Variable(torch.from_numpy(val_loader.dataset.X))), dim= 1)
                 # val_accuracy = self.accuracy(val_output[1], Variable(torch.from_numpy(val_loader.dataset.y)))
                 # self.val_acc_history.append(val_accuracy)
-            print('[Epoch : ' + str(epoch) + '/' + str(num_epochs) + '] : ' + str(loss.data))
+            print('[Epoch : ' + str(epoch) + '/' + str(num_epochs) + '] : ' + str(loss.item()))
             model.save('models/' + exp_dir_name + '/relaynet_epoch' + str(epoch + 1) + '.model')
         print('FINISH.')
