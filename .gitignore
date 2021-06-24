@@ -9,3 +9,5 @@ networks/classifiers/__pycache__/
 .ipynb_checkpoints/
 models/
 
+.ipynb_checkpoints/Run_ReLayNet-checkpoint.ipynb
+.ipynb_checkpoints/*
