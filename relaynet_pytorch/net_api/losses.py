@@ -39,7 +39,7 @@ def dice_coeff(input, target):
 
 
 class DiceLoss(_Loss):
-    print("dice loss")
+
     def forward(self, output, target, weights=None, ignore_index=None):
         """
             output : NxCxHxW Variable
@@ -77,10 +77,10 @@ class DiceLoss(_Loss):
 
 
 class CrossEntropyLoss2d(nn.Module):
-    print("cross entropy loss")
+
     def __init__(self, weight=None, reduction='mean'): # size_average=True # this has been deprecated
         super(CrossEntropyLoss2d, self).__init__()
-        self.nll_loss = nn.CrossEntropyLoss(weight, reduction)
+        self.nll_loss = nn.CrossEntropyLoss(weight, reduction='mean')
 
     def forward(self, inputs, targets):
         return self.nll_loss(inputs, targets)
