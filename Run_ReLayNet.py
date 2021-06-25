@@ -63,7 +63,9 @@ if __name__ == "__main__":
     fold = "fold_9"
     suffix= f"_w_augs_{fold}"
     # path_dataset = Path(f"Z:/0-Projects and Experiments/KS - OCT membranes/oct_dataset_3100x256/0-h5/{fold}")
-    path_dataset =  Path(f"F:/Emmanuel/0-h5/{fold}")
+    # path_dataset =  Path(f"F:/Emmanuel/0-h5/{fold}")
+    path_dataset =  Path(f"F:/Emmanuel/0-h5/full_folds/{fold}")
+  
     rows_slicing, cols_slicing = (50,-50), ("start", "end")
     
     
@@ -86,8 +88,8 @@ if __name__ == "__main__":
     
     
     
-    train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=True, num_workers=4)
-    val_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False, num_workers=4)
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=True, num_workers=1)
+    val_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False, num_workers=1)
     
     param ={
             'num_channels':1,

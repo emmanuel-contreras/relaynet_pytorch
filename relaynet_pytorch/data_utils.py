@@ -48,6 +48,7 @@ def get_imdb_data(dir_path = None, suffix = '', row_slice=("start","end"), col_s
     NumClass = 10
 
     # Load DATA
+    print("Loading data.h5")
     Data = h5py.File(path_data, 'r')
     #Data = h5py.File('datasets/Data.h5', 'r')
     a_group_key = list(Data.keys())[0]
@@ -56,7 +57,8 @@ def get_imdb_data(dir_path = None, suffix = '', row_slice=("start","end"), col_s
     #### ECG modifications
     #print(f"data shape: {Data.shape}")
     ####
-        
+    
+    print("Loading lavel.h5")
     Label = h5py.File(path_labels, 'r')
     #Label = h5py.File('datasets/label.h5', 'r')
     a_group_key = list(Label.keys())[0]
@@ -66,7 +68,8 @@ def get_imdb_data(dir_path = None, suffix = '', row_slice=("start","end"), col_s
     #### ECG modifications
     #print(f"label shape: {Label.shape}")
     ####
-        
+    
+    print("Loading set.h5")
     set = h5py.File(path_set, 'r')
     #set = h5py.File('datasets/set.h5', 'r')
     a_group_key = list(set.keys())[0]

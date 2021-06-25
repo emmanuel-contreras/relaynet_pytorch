@@ -86,6 +86,9 @@ class Solver(object):
 
         for epoch in range(num_epochs):
             # scheduler.step() # originally commented here
+            # enumerate(DataLoader) causes high memory usage
+            # https://github.com/pytorch/pytorch/issues/20433
+            # https://github.com/rusty1s/pytorch_geometric/issues/2253
             for i_batch, sample_batched in enumerate(train_loader):
                 # ECG: originally commented in
                 # X = Variable(sample_batched[0])
