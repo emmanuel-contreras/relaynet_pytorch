@@ -45,9 +45,6 @@ if __name__ == "__main__":
     HERE = Path(__file__).resolve().parent
     
     
-    
-    "C:\Users\Nabiki\Desktop\relaynet inputs small\relaynet_inputs_small.tar.gz"
-    
     ##ECG
     # path_dataset = Path("C:/Users/econtrerasguzman/Desktop/development/skala_lab/projects/placenta_oct_(Kayvan)/relaynet_pytorch-master/ecg_small_dataset")
     
@@ -76,7 +73,14 @@ if __name__ == "__main__":
     ## small dataset 
     fold = "fold_0"
     suffix= f"_w_augs_{fold}_small"
-    path_dataset = r"Z:\0-Projects and Experiments\KS - OCT membranes\relaynet_small_dataset".replace("\\","/")
+    
+    #local path
+    # path_dataset = r"Z:\0-Projects and Experiments\KS - OCT membranes\relaynet_small_dataset".replace("\\","/")
+    
+    #Docker path
+    path_dataset = Path("/tmp/dataset")
+    
+    
     path_dataset =  Path(path_dataset)
     
     rows_slicing, cols_slicing = (50,-50), ("start", "end")
