@@ -31,7 +31,8 @@ RUN conda install -y \
 # RUN pip install --no-cache-dir /tmp/chtc_segmentation \
 # && python -c "import shared_segmentation_functions as ssf"
 
-COPY relaynet_inputs_small.tar.gz /tmp/dataset
+ADD relaynet_inputs_small.tar.gz /tmp/dataset/
+ADD relaynet_pytorch-master.tar.gz /tmp/relaynet/
 
 # quick test and dump package lists
 # python -c "import tensorflow; print('Tensorflow version', tensorflow.__version__)" \

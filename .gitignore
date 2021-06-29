@@ -12,3 +12,7 @@ models/
 .ipynb_checkpoints/Run_ReLayNet-checkpoint.ipynb
 .ipynb_checkpoints/*
 docker/relaynet_inputs_small.tar.gz
+chtc/docker/relaynet_inputs_small.tar.gz
+chtc/docker/relaynet_pytorch-master.tar.gz
+chtc/docker/relaynet_pytorch-master/*
+chtc/docker/relaynet_pytorch-master.tar
