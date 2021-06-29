@@ -42,6 +42,11 @@ plt.rcParams['image.cmap'] = 'gray'
 if __name__ == "__main__":
     # In[2]:
     
+    HERE = Path(__file__).resolve().parent
+    
+    
+    
+    "C:\Users\Nabiki\Desktop\relaynet inputs small\relaynet_inputs_small.tar.gz"
     
     ##ECG
     # path_dataset = Path("C:/Users/econtrerasguzman/Desktop/development/skala_lab/projects/placenta_oct_(Kayvan)/relaynet_pytorch-master/ecg_small_dataset")
@@ -59,13 +64,21 @@ if __name__ == "__main__":
     # rows_slicing, cols_slicing = (100,"end"), (256, "end")
     
     
-    ### Full oct dataset
-    fold = "fold_9"
-    suffix= f"_w_augs_{fold}"
     # path_dataset = Path(f"Z:/0-Projects and Experiments/KS - OCT membranes/oct_dataset_3100x256/0-h5/{fold}")
     # path_dataset =  Path(f"F:/Emmanuel/0-h5/{fold}")
-    path_dataset =  Path(f"F:/Emmanuel/0-h5/full_folds/{fold}")
-  
+    
+    ### Full oct dataset
+    # fold = "fold_9"
+    # suffix= f"_w_augs_{fold}_small"
+    # path_dataset =  Path(f"F:/Emmanuel/0-h5/full_folds/{fold}")
+    
+    
+    ## small dataset 
+    fold = "fold_0"
+    suffix= f"_w_augs_{fold}_small"
+    path_dataset = r"Z:\0-Projects and Experiments\KS - OCT membranes\relaynet_small_dataset".replace("\\","/")
+    path_dataset =  Path(path_dataset)
+    
     rows_slicing, cols_slicing = (50,-50), ("start", "end")
     
     
@@ -139,73 +152,80 @@ if __name__ == "__main__":
     # In[4]:
     
     
-    relaynet_model.save(str(f"models/relaynet_model_{fold}.model"))
+    # relaynet_model.save(str(f"models/relaynet_model_{fold}.model"))
     
+    # CHTC
+    output_path = str(path_dataset / f"relaynet_model_{fold}.model")
+    relaynet_model.save(output_path) 
     
     # # Deploy Model on Test Data
     
     # In[5]:
     
     
-    SEG_LABELS_LIST = [
-        {"id": -1, "name": "void", "rgb_values": [0, 0, 0]},
-        {"id": 0, "name": "Region above the retina (RaR)", "rgb_values": [128, 0, 0]},
-        {"id": 1, "name": "ILM: Inner limiting membrane", "rgb_values": [0, 128, 0]},
-        {"id": 2, "name": "NFL-IPL: Nerve fiber ending to Inner plexiform layer", "rgb_values": [128, 128, 0]},
-        {"id": 3, "name": "INL: Inner Nuclear layer", "rgb_values": [0, 0, 128]},
-        {"id": 4, "name": "OPL: Outer plexiform layer", "rgb_values": [128, 0, 128]},
-        {"id": 5, "name": "ONL-ISM: Outer Nuclear layer to Inner segment myeloid", "rgb_values": [0, 128, 128]},
-        {"id": 6, "name": "ISE: Inner segment ellipsoid", "rgb_values": [128, 128, 128]},
-        {"id": 7, "name": "OS-RPE: Outer segment to Retinal pigment epithelium", "rgb_values": [64, 0, 0]},
-        {"id": 8, "name": "Region below RPE (RbR)", "rgb_values": [192, 0, 0]}];
-        #{"id": 9, "name": "Fluid region", "rgb_values": [64, 128, 0]}];
+    # SEG_LABELS_LIST = [
+    #     {"id": -1, "name": "void", "rgb_values": [0, 0, 0]},
+    #     {"id": 0, "name": "Region above the retina (RaR)", "rgb_values": [128, 0, 0]},
+    #     {"id": 1, "name": "ILM: Inner limiting membrane", "rgb_values": [0, 128, 0]},
+    #     {"id": 2, "name": "NFL-IPL: Nerve fiber ending to Inner plexiform layer", "rgb_values": [128, 128, 0]},
+    #     {"id": 3, "name": "INL: Inner Nuclear layer", "rgb_values": [0, 0, 128]},
+    #     {"id": 4, "name": "OPL: Outer plexiform layer", "rgb_values": [128, 0, 128]},
+    #     {"id": 5, "name": "ONL-ISM: Outer Nuclear layer to Inner segment myeloid", "rgb_values": [0, 128, 128]},
+    #     {"id": 6, "name": "ISE: Inner segment ellipsoid", "rgb_values": [128, 128, 128]},
+    #     {"id": 7, "name": "OS-RPE: Outer segment to Retinal pigment epithelium", "rgb_values": [64, 0, 0]},
+    #     {"id": 8, "name": "Region below RPE (RbR)", "rgb_values": [192, 0, 0]}];
+    #     #{"id": 9, "name": "Fluid region", "rgb_values": [64, 128, 0]}];
         
-    def label_img_to_rgb(label_img):
-        label_img = np.squeeze(label_img)
-        labels = np.unique(label_img)
-        label_infos = [l for l in SEG_LABELS_LIST if l['id'] in labels]
+    # def label_img_to_rgb(label_img):
+    #     label_img = np.squeeze(label_img)
+    #     labels = np.unique(label_img)
+    #     label_infos = [l for l in SEG_LABELS_LIST if l['id'] in labels]
     
-        label_img_rgb = np.array([label_img,
-                                  label_img,
-                                  label_img]).transpose(1,2,0)
-        for l in label_infos:
-            mask = label_img == l['id']
-            label_img_rgb[mask] = l['rgb_values']
+    #     label_img_rgb = np.array([label_img,
+    #                               label_img,
+    #                               label_img]).transpose(1,2,0)
+    #     for l in label_infos:
+    #         mask = label_img == l['id']
+    #         label_img_rgb[mask] = l['rgb_values']
     
-        return label_img_rgb.astype(np.uint8)
+    #     return label_img_rgb.astype(np.uint8)
+    
+
     
     
-    # In[8]:
+    # import matplotlib.pyplot as plt
+    # import torch.nn.functional as F
+    # import torch 
     
+    # import matplotlib.pylab as plt
+    # import matplotlib as mpl
+    # mpl.rcParams["figure.dpi"] ==300
     
-    import matplotlib.pyplot as plt
-    import torch.nn.functional as F
-    import torch 
+    # img_num = 11
     
-    img_num = 11
-    
-    with torch.no_grad(): # this frees up GPU memory in between runs!!!
+    # with torch.no_grad(): # this frees up GPU memory in between runs!!!
         
-        print(test_data.X[img_num:img_num+1,...].shape)
+    #     print(test_data.X[img_num:img_num+1,...].shape)
     
-        path_model = Path("Z:/0-Projects and Experiments/KS - OCT membranes/trained_models/relaynet_model_fold_9.model")
-        relaynet_model =  torch.load(str(path_model))
-        #out = relaynet_model(Variable(torch.Tensor(test_data.X[0:1]).cuda(),volatile=True)) # originally 
-        out = relaynet_model(torch.Tensor(test_data.X[img_num:img_num+1,...]).cuda())
-        out = F.softmax(out,dim=1)
-        max_val, idx = torch.max(out,1)
-        idx = idx.data.cpu().numpy()
-        #idx = label_img_to_rgb(idx) # originaly commented in 
-        idx = np.squeeze(idx) #ECG added 
-        print(np.unique(idx), idx.shape)
-        # plt.imshow(idx == 1) # show only one layer
-        plt.imshow(idx)
-        plt.show()
+    #     # path_model = Path("Z:/0-Projects and Experiments/KS - OCT membranes/trained_models/relaynet_model_fold_9.model")
+    #     path_model = Path(r"Z:\0-Projects and Experiments\KS - OCT membranes\relaynet_small_dataset\relaynet_model_fold_0.model".replace("\\",'/'))
+    #     relaynet_model =  torch.load(str(path_model))
+    #     #out = relaynet_model(Variable(torch.Tensor(test_data.X[0:1]).cuda(),volatile=True)) # originally 
+    #     out = relaynet_model(torch.Tensor(test_data.X[img_num:img_num+1,...]).cuda())
+    #     out = F.softmax(out,dim=1)
+    #     max_val, idx = torch.max(out,1)
+    #     idx = idx.data.cpu().numpy()
+    #     idx = label_img_to_rgb(idx) # originaly commented in 
+    #     idx = np.squeeze(idx) #ECG added 
+    #     print(np.unique(idx), idx.shape)
+    #     # plt.imshow(idx == 1) # show only one layer
+    #     plt.imshow(idx)
+    #     plt.show()
     
-        img_test = test_data.X[img_num:img_num+1,...] 
-        img_test = np.squeeze(img_test)
-        plt.imshow(img_test)
-        plt.show()
+    #     img_test = test_data.X[img_num:img_num+1,...] 
+    #     img_test = np.squeeze(img_test)
+    #     plt.imshow(img_test)
+    #     plt.show()
     
     
     # In[ ]:

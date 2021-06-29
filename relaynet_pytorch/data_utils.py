@@ -58,7 +58,7 @@ def get_imdb_data(dir_path = None, suffix = '', row_slice=("start","end"), col_s
     #print(f"data shape: {Data.shape}")
     ####
     
-    print("Loading lavel.h5")
+    print("Loading label.h5")
     Label = h5py.File(path_labels, 'r')
     #Label = h5py.File('datasets/label.h5', 'r')
     a_group_key = list(Label.keys())[0]
