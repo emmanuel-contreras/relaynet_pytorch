@@ -97,8 +97,8 @@ if __name__ == "__main__":
     
     
     
-    train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=True, num_workers=1, prefetch_factor=1)
-    val_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False, num_workers=1, prefetch_factor=1)
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=True, num_workers=0) # prefetch_factor=1
+    val_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False, num_workers=0) #prefetch_factor=1
     
     param ={
             'num_channels':1,
