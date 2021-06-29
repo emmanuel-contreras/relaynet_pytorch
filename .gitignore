@@ -11,3 +11,4 @@ models/
 
 .ipynb_checkpoints/Run_ReLayNet-checkpoint.ipynb
 .ipynb_checkpoints/*
+docker/relaynet_inputs_small.tar.gz
