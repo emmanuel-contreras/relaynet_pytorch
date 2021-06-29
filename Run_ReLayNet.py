@@ -15,13 +15,13 @@ from pathlib import Path
 #ECG: you will also need to install h5py in the conda env
 import os 
 
-# os.chdir(r"C:\Users\OCT\Desktop\development\relaynet_pytorch".replace("\\", "/"))
+
 
 # change directory to relaynet folder
-# os.chdir(r"C:\Users\OCT\Desktop\development\relaynet_pytorch".replace("\\", "/"))
+os.chdir(r"C:\Users\OCT\Desktop\development\relaynet_pytorch".replace("\\", "/"))
 
 # on docker
-os.chdir("/tmp/relaynet/relaynet_pytorch-master")
+# os.chdir("/tmp/relaynet/relaynet_pytorch-master")
 
 from relaynet_pytorch.relay_net import ReLayNet
 from relaynet_pytorch.data_utils import get_imdb_data
@@ -76,14 +76,12 @@ if __name__ == "__main__":
     
     
     ## small dataset 
-    fold = "fold_0"
-    suffix= f"_w_augs_{fold}_small"
-    
-    #local path
+    # fold = "fold_0"
+    # suffix= f"_w_augs_{fold}_small"
+    # #local path
     # path_dataset = r"Z:\0-Projects and Experiments\KS - OCT membranes\relaynet_small_dataset".replace("\\","/")
-    
     #Docker path
-    path_dataset = Path("/tmp/dataset")
+    # path_dataset = Path("/tmp/dataset")
     
     path_dataset =  Path(path_dataset)
 
