@@ -43,8 +43,7 @@ if __name__ == "__main__":
     # In[2]:
     
     HERE = Path(__file__).resolve().parent
-    
-    
+
     ##ECG
     # path_dataset = Path("C:/Users/econtrerasguzman/Desktop/development/skala_lab/projects/placenta_oct_(Kayvan)/relaynet_pytorch-master/ecg_small_dataset")
     
@@ -65,12 +64,13 @@ if __name__ == "__main__":
     # path_dataset =  Path(f"F:/Emmanuel/0-h5/{fold}")
     
     ### Full oct dataset
-    # fold = "fold_9"
-    # suffix= f"_w_augs_{fold}_small"
-    # path_dataset =  Path(f"F:/Emmanuel/0-h5/full_folds/{fold}")
+    fold = "fold_9"
+    suffix= f"_w_augs_{fold}"
+    path_dataset =  Path(f"F:/Emmanuel/0-h5/full_folds/{fold}")
     
     
     ## small dataset 
+
     fold = "fold_0"
     suffix= f"_w_augs_{fold}_small"
     
@@ -82,6 +82,7 @@ if __name__ == "__main__":
     
     
     path_dataset =  Path(path_dataset)
+
     
     rows_slicing, cols_slicing = (50,-50), ("start", "end")
     
@@ -105,8 +106,8 @@ if __name__ == "__main__":
     
     
     
-    train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=True, num_workers=1)
-    val_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False, num_workers=1)
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=True, num_workers=1, prefetch_factor=1)
+    val_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False, num_workers=1, prefetch_factor=1)
     
     param ={
             'num_channels':1,
