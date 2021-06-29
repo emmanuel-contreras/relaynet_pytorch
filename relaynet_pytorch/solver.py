@@ -85,7 +85,10 @@ class Solver(object):
         create_exp_directory(exp_dir_name)
 
         for epoch in range(num_epochs):
-            scheduler.step()
+            # scheduler.step() # originally commented here
+            # enumerate(DataLoader) causes high memory usage
+            # https://github.com/pytorch/pytorch/issues/20433
+            # https://github.com/rusty1s/pytorch_geometric/issues/2253
             for i_batch, sample_batched in enumerate(train_loader):
                 # ECG: originally commented in
                 # X = Variable(sample_batched[0])
@@ -119,6 +122,7 @@ class Solver(object):
                         self.train_loss_history.append(loss.item()) # was loss.data
                         print('[Iteration : ' + str(iter) + '/' + str(iter_per_epoch * num_epochs) + '] : ' + str(
                             loss.item()))
+            scheduler.step() # step the schedule AFTER optim.step() has been called
 
 
                 #_, batch_output = torch.max(F.softmax(model(X),dim=1), dim=1)
